@@ -3,29 +3,30 @@ use std::fs;
 use crate::model::FilePath;
 
 pub fn list_xml_files_in_dir(path: &String) -> Vec<FilePath> {
-    let mut xml_files = Vec::new();
-    match fs::read_dir(path) {
-        Ok(entries) => {
-            println!("Have entries");
-            for entry in entries {
-                match entry {
-                    Ok(entry) => {
-                        let path = entry.path();
-                        println!("Have path {:?}", path);
-                        let is_xml = path.extension().and_then(|ext| ext.to_str()).unwrap_or("").eq_ignore_ascii_case("xml");
-                        let starts_with_test = path.file_name().and_then(|name| name.to_str()).unwrap_or("").starts_with("TEST");
-                        if is_xml && starts_with_test {
-                            xml_files.push(FilePath { path: path.to_str().unwrap().to_string() })
-                        }
-                    }
-                    Err(_e) => eprintln!("Can't read file in {}", path)
+    fs::read_dir(path)
+        .map(|entries| {
+            entries.filter_map(|entry| {
+                let entry = entry.ok()?;
+                let path = entry.path();
+                let is_xml = path.extension()
+                    .and_then(|ext| ext.to_str())
+                    .unwrap_or("")
+                    .eq_ignore_ascii_case("xml");
+                let starts_with_test = path.file_name()
+                    .and_then(|name| name.to_str())
+                    .unwrap_or("")
+                    .starts_with("TEST");
+                if is_xml && starts_with_test {
+                    Some(FilePath { path: path.to_str()?.to_string() })
+                } else {
+                    None
                 }
-            }
-        }
-        Err(_e) => eprintln!("Can't list files in directory {}", path)
-    }
-    println!("Returning {}", xml_files.len());
-    xml_files
+            }).collect()
+        })
+        .unwrap_or_else(|_| {
+            eprintln!("Can't list files in directory {}", path);
+            Vec::new()
+        })
 }
 
 pub fn list_xml_files_in_dirs(paths: Vec<String>) -> Vec<FilePath> {
@@ -67,7 +68,7 @@ mod tests {
         //when
         let dirs = list_xml_files_in_dir(&dir.path().to_string_lossy().to_string());
 
-        //tgeb
+        //then
         assert_eq!(dirs.len(), 1)
     }
 
@@ -81,7 +82,7 @@ mod tests {
         //when
         let dirs = list_xml_files_in_dir(&dir.path().to_string_lossy().to_string());
 
-        //tgeb
+        //then
         assert_eq!(dirs.len(), 1)
     }
 }
