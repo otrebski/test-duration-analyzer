@@ -1,22 +1,34 @@
 use std::collections::BTreeMap;
+use clap::Parser;
 use crate::model::{TestSuite, TimeByLetter};
 
 mod model;
 mod loader;
 mod parser;
 
-fn main() {
-    let x = "E:\\scala\\booking\\target\\test-reports";
-    let y = "E:\\java\\otroslogviewer\\olv-core\\build\\test-results\\test";
+#[derive(Parser, Debug)]
+#[command(name = "command ...")]
+struct Args {
+    /// Number of groups
+    #[arg(short, long, default_value_t = 5)]
+    count: u16,
 
-    let vec = loader::list_xml_files_in_dirs(vec![x.to_string(), y.to_string()]);
+    /// List of paths with JUNIT reports
+    #[arg(default_value = ".")]
+    paths: Vec<String>,
+}
+
+fn main() {
+    let args = Args::parse();
+
+    let vec = loader::list_xml_files_in_dirs(args.paths);
     let test_suites: Vec<TestSuite> = vec
         .iter()
         .filter_map(|file_path| parser::file_to_report(file_path))
         .collect();
     let by_first_letter = group_by_first_letter(test_suites);
 
-    let groups = divide_into_groups(5, by_first_letter);
+    let groups = divide_into_groups(args.count, by_first_letter);
 
     for group in &groups {
         let string: String = group.iter().map(|tbl| tbl.letter.clone()).collect();
@@ -26,7 +38,6 @@ fn main() {
     }
     println!("=======================================");
     println!("Total time: {}", groups.iter().flatten().map(|tbl| tbl.time).sum::<f32>().round().abs());
-
 }
 
 fn duration(test_suites: &Vec<TestSuite>) -> f32 {
