@@ -11,7 +11,6 @@ pub struct TestSuite {
 
     #[serde(rename = "testcase")]
     pub test_cases: Vec<TestCase>,
-
 }
 #[derive(Debug, Deserialize, Serialize)]
 pub struct TestCase {
@@ -46,4 +45,3 @@ pub struct FilePath {
 //         Some(self.letter.cmp(&other.letter))
 //     }
 // }
-

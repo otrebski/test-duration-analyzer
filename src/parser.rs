@@ -1,13 +1,15 @@
 use crate::model::{FilePath, TestSuite};
-use std::fs;
 use quick_xml::de::from_str;
+use std::fs;
 
 pub fn file_to_report(path: &FilePath) -> Option<TestSuite> {
     let content = fs::read_to_string(&path.path)
-        .map_err(|_| { eprintln!("Can't read content of file {}", path.path); })
+        .map_err(|_| {
+            eprintln!("Can't read content of file {}", path.path);
+        })
         .ok()?;
     from_str::<TestSuite>(&content)
-        .map_err(|_| { eprintln!("Can't parse file {}", path.path) })
+        .map_err(|_| eprintln!("Can't parse file {}", path.path))
         .ok()
 }
 
@@ -39,7 +41,9 @@ mod tests {
         writeln!(file, "{}", test_suite).unwrap();
 
         //when
-        let result = file_to_report(&FilePath { path: path.to_string_lossy().into_owned() });
+        let result = file_to_report(&FilePath {
+            path: path.to_string_lossy().into_owned(),
+        });
 
         //then
         assert!(result.is_some()); // Check if we get a Some(TestSuite)
@@ -48,7 +52,9 @@ mod tests {
     #[test]
     fn test_file_to_report_not_found() {
         //when
-        let result = file_to_report(&FilePath { path: "non_existent_file.json".to_string() });
+        let result = file_to_report(&FilePath {
+            path: "non_existent_file.json".to_string(),
+        });
 
         //then
         assert!(result.is_none()); // Expect None for non-existent file
@@ -63,7 +69,9 @@ mod tests {
         let mut file = File::create(&path).unwrap();
         writeln!(file, "invalid xml").unwrap();
 
-        let result = file_to_report(&FilePath { path: path.to_string_lossy().into_owned() });
+        let result = file_to_report(&FilePath {
+            path: path.to_string_lossy().into_owned(),
+        });
         assert!(result.is_none()); // Expect None for invalid JSON
     }
 }

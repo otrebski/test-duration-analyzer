@@ -1,27 +1,33 @@
+use crate::model::FilePath;
 use std::collections::HashSet;
 use std::fs;
-use crate::model::FilePath;
 
 pub fn list_xml_files_in_dir(path: &String) -> Vec<FilePath> {
     fs::read_dir(path)
         .map(|entries| {
-            entries.filter_map(|entry| {
-                let entry = entry.ok()?;
-                let path = entry.path();
-                let is_xml = path.extension()
-                    .and_then(|ext| ext.to_str())
-                    .unwrap_or("")
-                    .eq_ignore_ascii_case("xml");
-                let starts_with_test = path.file_name()
-                    .and_then(|name| name.to_str())
-                    .unwrap_or("")
-                    .starts_with("TEST");
-                if is_xml && starts_with_test {
-                    Some(FilePath { path: path.to_str()?.to_string() })
-                } else {
-                    None
-                }
-            }).collect()
+            entries
+                .filter_map(|entry| {
+                    let entry = entry.ok()?;
+                    let path = entry.path();
+                    let is_xml = path
+                        .extension()
+                        .and_then(|ext| ext.to_str())
+                        .unwrap_or("")
+                        .eq_ignore_ascii_case("xml");
+                    let starts_with_test = path
+                        .file_name()
+                        .and_then(|name| name.to_str())
+                        .unwrap_or("")
+                        .starts_with("TEST");
+                    if is_xml && starts_with_test {
+                        Some(FilePath {
+                            path: path.to_str()?.to_string(),
+                        })
+                    } else {
+                        None
+                    }
+                })
+                .collect()
         })
         .unwrap_or_else(|_| {
             eprintln!("Can't list files in directory {}", path);
@@ -30,7 +36,11 @@ pub fn list_xml_files_in_dir(path: &String) -> Vec<FilePath> {
 }
 
 pub fn list_xml_files_in_dirs(paths: Vec<String>) -> Vec<FilePath> {
-    let unique: Vec<String> = paths.into_iter().collect::<HashSet<_>>().into_iter().collect();
+    let unique: Vec<String> = paths
+        .into_iter()
+        .collect::<HashSet<_>>()
+        .into_iter()
+        .collect();
     unique
         .iter()
         .map(|path| list_xml_files_in_dir(path))
