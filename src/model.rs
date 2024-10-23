@@ -35,6 +35,12 @@ impl TimeByLetter {
     }
 }
 
+impl PartialEq for TimeByLetter {
+    fn eq(&self, other: &Self) -> bool {
+        self.letter == other.letter && self.time == other.time
+    }
+}
+
 #[derive(Debug)]
 pub struct FilePath {
     pub path: String,

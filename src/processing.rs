@@ -95,4 +95,92 @@ mod test {
         //then
         assert_eq!(duration, 1.0);
     }
+
+    #[test]
+    fn empty_group_by_first_letter() {
+        //given
+
+        //when
+        let result: Vec<TimeByLetter> = group_by_first_letter(vec![]);
+
+        //then
+        let expected = vec![
+            TimeByLetter::new(0.0, 'A'),
+            TimeByLetter::new(0.0, 'B'),
+            TimeByLetter::new(0.0, 'C'),
+            TimeByLetter::new(0.0, 'D'),
+            TimeByLetter::new(0.0, 'E'),
+            TimeByLetter::new(0.0, 'F'),
+            TimeByLetter::new(0.0, 'G'),
+            TimeByLetter::new(0.0, 'H'),
+            TimeByLetter::new(0.0, 'I'),
+            TimeByLetter::new(0.0, 'J'),
+            TimeByLetter::new(0.0, 'K'),
+            TimeByLetter::new(0.0, 'L'),
+            TimeByLetter::new(0.0, 'M'),
+            TimeByLetter::new(0.0, 'N'),
+            TimeByLetter::new(0.0, 'O'),
+            TimeByLetter::new(0.0, 'P'),
+            TimeByLetter::new(0.0, 'Q'),
+            TimeByLetter::new(0.0, 'R'),
+            TimeByLetter::new(0.0, 'S'),
+            TimeByLetter::new(0.0, 'T'),
+            TimeByLetter::new(0.0, 'U'),
+            TimeByLetter::new(0.0, 'V'),
+            TimeByLetter::new(0.0, 'W'),
+            TimeByLetter::new(0.0, 'X'),
+            TimeByLetter::new(0.0, 'Y'),
+            TimeByLetter::new(0.0, 'Z'),
+        ];
+        assert_eq!(result, expected);
+    }
+    #[test]
+    fn non_empty_group_by_first_letter() {
+        //given
+
+        //when
+        let result: Vec<TimeByLetter> = group_by_first_letter(vec![
+          TestSuite {
+            name: String::from("Abrakadabra1"),
+            time: 1.0,
+            test_cases: vec![],
+        },
+          TestSuite {
+            name: String::from("Abrakadabra2"),
+            time: 2.0,
+            test_cases: vec![],
+        },
+        ]);
+
+        //then
+        let expected = vec![
+            TimeByLetter::new(3.0, 'A'),
+            TimeByLetter::new(0.0, 'B'),
+            TimeByLetter::new(0.0, 'C'),
+            TimeByLetter::new(0.0, 'D'),
+            TimeByLetter::new(0.0, 'E'),
+            TimeByLetter::new(0.0, 'F'),
+            TimeByLetter::new(0.0, 'G'),
+            TimeByLetter::new(0.0, 'H'),
+            TimeByLetter::new(0.0, 'I'),
+            TimeByLetter::new(0.0, 'J'),
+            TimeByLetter::new(0.0, 'K'),
+            TimeByLetter::new(0.0, 'L'),
+            TimeByLetter::new(0.0, 'M'),
+            TimeByLetter::new(0.0, 'N'),
+            TimeByLetter::new(0.0, 'O'),
+            TimeByLetter::new(0.0, 'P'),
+            TimeByLetter::new(0.0, 'Q'),
+            TimeByLetter::new(0.0, 'R'),
+            TimeByLetter::new(0.0, 'S'),
+            TimeByLetter::new(0.0, 'T'),
+            TimeByLetter::new(0.0, 'U'),
+            TimeByLetter::new(0.0, 'V'),
+            TimeByLetter::new(0.0, 'W'),
+            TimeByLetter::new(0.0, 'X'),
+            TimeByLetter::new(0.0, 'Y'),
+            TimeByLetter::new(0.0, 'Z'),
+        ];
+        assert_eq!(result, expected);
+    }
 }
