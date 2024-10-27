@@ -140,16 +140,16 @@ mod test {
 
         //when
         let result: Vec<TimeByLetter> = group_by_first_letter(vec![
-          TestSuite {
-            name: String::from("Abrakadabra1"),
-            time: 1.0,
-            test_cases: vec![],
-        },
-          TestSuite {
-            name: String::from("Abrakadabra2"),
-            time: 2.0,
-            test_cases: vec![],
-        },
+            TestSuite {
+                name: String::from("Abrakadabra1"),
+                time: 1.0,
+                test_cases: vec![],
+            },
+            TestSuite {
+                name: String::from("Abrakadabra2"),
+                time: 2.0,
+                test_cases: vec![],
+            },
         ]);
 
         //then
@@ -180,6 +180,164 @@ mod test {
             TimeByLetter::new(0.0, 'X'),
             TimeByLetter::new(0.0, 'Y'),
             TimeByLetter::new(0.0, 'Z'),
+        ];
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn divide_into_groups_empty() {
+        //when
+        let result: Vec<Vec<TimeByLetter>> = divide_into_groups(4, vec![]);
+
+        //then
+        let expected: Vec<Vec<TimeByLetter>> = vec![];
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn divide_into_groups_non_empty() {
+        //when
+        let result: Vec<Vec<TimeByLetter>> = divide_into_groups(
+            4,
+            vec![
+                TimeByLetter::new(10.0, 'A'),
+                TimeByLetter::new(10.0, 'B'),
+                TimeByLetter::new(10.0, 'C'),
+                TimeByLetter::new(10.0, 'D'),
+                TimeByLetter::new(10.0, 'E'),
+                TimeByLetter::new(10.0, 'F'),
+                TimeByLetter::new(10.0, 'G'),
+                TimeByLetter::new(10.0, 'H'),
+                TimeByLetter::new(10.0, 'I'),
+                TimeByLetter::new(10.0, 'J'),
+                TimeByLetter::new(10.0, 'K'),
+                TimeByLetter::new(10.0, 'L'),
+                TimeByLetter::new(10.0, 'M'),
+                TimeByLetter::new(10.0, 'N'),
+                TimeByLetter::new(10.0, 'O'),
+                TimeByLetter::new(10.0, 'P'),
+                TimeByLetter::new(10.0, 'Q'),
+                TimeByLetter::new(10.0, 'R'),
+                TimeByLetter::new(10.0, 'S'),
+                TimeByLetter::new(10.0, 'T'),
+                TimeByLetter::new(10.0, 'U'),
+                TimeByLetter::new(10.0, 'V'),
+                TimeByLetter::new(10.0, 'W'),
+                TimeByLetter::new(10.0, 'X'),
+                TimeByLetter::new(10.0, 'Y'),
+                TimeByLetter::new(10.0, 'Z'),
+            ],
+        );
+
+        //then
+        let expected: Vec<Vec<TimeByLetter>> = vec![
+            vec![
+                TimeByLetter::new(10.0, 'A'),
+                TimeByLetter::new(10.0, 'B'),
+                TimeByLetter::new(10.0, 'C'),
+                TimeByLetter::new(10.0, 'D'),
+                TimeByLetter::new(10.0, 'E'),
+                TimeByLetter::new(10.0, 'F'),
+            ],
+            vec![
+                TimeByLetter::new(10.0, 'G'),
+                TimeByLetter::new(10.0, 'H'),
+                TimeByLetter::new(10.0, 'I'),
+                TimeByLetter::new(10.0, 'J'),
+                TimeByLetter::new(10.0, 'K'),
+                TimeByLetter::new(10.0, 'L'),
+            ],
+            vec![
+                TimeByLetter::new(10.0, 'M'),
+                TimeByLetter::new(10.0, 'N'),
+                TimeByLetter::new(10.0, 'O'),
+                TimeByLetter::new(10.0, 'P'),
+                TimeByLetter::new(10.0, 'Q'),
+                TimeByLetter::new(10.0, 'R'),
+            ],
+            vec![
+                TimeByLetter::new(10.0, 'S'),
+                TimeByLetter::new(10.0, 'T'),
+                TimeByLetter::new(10.0, 'U'),
+                TimeByLetter::new(10.0, 'V'),
+                TimeByLetter::new(10.0, 'W'),
+                TimeByLetter::new(10.0, 'X'),
+            ],
+            vec![TimeByLetter::new(10.0, 'Y'), TimeByLetter::new(10.0, 'Z')],
+        ];
+        assert_eq!(result, expected);
+    }
+    #[test]
+    fn divide_into_groups_with_one_large() {
+        //when
+        let result: Vec<Vec<TimeByLetter>> = divide_into_groups(
+            4,
+            vec![
+                TimeByLetter::new(10.0, 'A'),
+                TimeByLetter::new(10.0, 'B'),
+                TimeByLetter::new(10.0, 'C'),
+                TimeByLetter::new(10.0, 'D'),
+                TimeByLetter::new(10.0, 'E'),
+                TimeByLetter::new(10.0, 'F'),
+                TimeByLetter::new(10.0, 'G'),
+                TimeByLetter::new(10.0, 'H'),
+                TimeByLetter::new(10.0, 'I'),
+                TimeByLetter::new(10.0, 'J'),
+                TimeByLetter::new(10.0, 'K'),
+                TimeByLetter::new(10.0, 'L'),
+                TimeByLetter::new(100.0, 'M'),
+                TimeByLetter::new(10.0, 'N'),
+                TimeByLetter::new(10.0, 'O'),
+                TimeByLetter::new(10.0, 'P'),
+                TimeByLetter::new(10.0, 'Q'),
+                TimeByLetter::new(10.0, 'R'),
+                TimeByLetter::new(10.0, 'S'),
+                TimeByLetter::new(10.0, 'T'),
+                TimeByLetter::new(10.0, 'U'),
+                TimeByLetter::new(10.0, 'V'),
+                TimeByLetter::new(10.0, 'W'),
+                TimeByLetter::new(10.0, 'X'),
+                TimeByLetter::new(10.0, 'Y'),
+                TimeByLetter::new(10.0, 'Z'),
+            ],
+        );
+
+        //then
+        let expected: Vec<Vec<TimeByLetter>> = vec![
+            vec![
+                TimeByLetter::new(10.0, 'A'),
+                TimeByLetter::new(10.0, 'B'),
+                TimeByLetter::new(10.0, 'C'),
+                TimeByLetter::new(10.0, 'D'),
+                TimeByLetter::new(10.0, 'E'),
+                TimeByLetter::new(10.0, 'F'),
+                TimeByLetter::new(10.0, 'G'),
+                TimeByLetter::new(10.0, 'H'),
+
+            ],
+            vec![
+                TimeByLetter::new(10.0, 'I'),
+                TimeByLetter::new(10.0, 'J'),
+                TimeByLetter::new(10.0, 'K'),
+                TimeByLetter::new(10.0, 'L'),
+            ],
+            vec![TimeByLetter::new(100.0, 'M')],
+            vec![
+                TimeByLetter::new(10.0, 'N'),
+                TimeByLetter::new(10.0, 'O'),
+                TimeByLetter::new(10.0, 'P'),
+                TimeByLetter::new(10.0, 'Q'),
+                TimeByLetter::new(10.0, 'R'),
+                TimeByLetter::new(10.0, 'S'),
+                TimeByLetter::new(10.0, 'T'),
+                TimeByLetter::new(10.0, 'U'),
+            ],
+            vec![
+                TimeByLetter::new(10.0, 'V'),
+                TimeByLetter::new(10.0, 'W'),
+                TimeByLetter::new(10.0, 'X'),
+                TimeByLetter::new(10.0, 'Y'),
+                TimeByLetter::new(10.0, 'Z')],
         ];
         assert_eq!(result, expected);
     }
