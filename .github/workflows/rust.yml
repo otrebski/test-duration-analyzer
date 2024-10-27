@@ -20,3 +20,17 @@ jobs:
         run: cargo build --verbose
       - name: Run tests
         run: cargo test --verbose
+      - name: Install Tarpaulin for Coverage
+        run: cargo install cargo-tarpaulin
+      - name: Run Tests with Coverage
+        run: |
+          cargo tarpaulin --out Xml
+        env:
+          RUSTFLAGS: '-C link-dead-code'
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          file: ./cobertura.xml  # Use the generated XML coverage report
+          flags: unittests
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
