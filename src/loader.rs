@@ -64,7 +64,7 @@ mod tests {
         //when
         let dirs = list_xml_files_in_dir(&dir.path().to_string_lossy().to_string());
 
-        //tgeb
+        //then
         assert_eq!(dirs.len(), 2)
     }
 
@@ -94,5 +94,25 @@ mod tests {
 
         //then
         assert_eq!(dirs.len(), 1)
+    }
+
+    #[test]
+    fn test_load_2_dirs() {
+        //given
+        let dir1 = tempdir().unwrap();
+        File::create(&dir1.path().join("TEST-a.xml")).unwrap();
+        let dir2 = tempdir().unwrap();
+        File::create(&dir1.path().join("TEST-b.xml")).unwrap();
+
+        //when
+        let dirs = list_xml_files_in_dirs(
+            vec![
+                dir1.path().to_string_lossy().to_string(),
+                dir2.path().to_string_lossy().to_string(),
+            ]
+        );
+
+        //then
+        assert_eq!(dirs.len(), 2)
     }
 }
